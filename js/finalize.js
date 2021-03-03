@@ -19,7 +19,6 @@ function deleteCard(cardNo) {
 }
 
 function buildList() {
-    console.log(document.cookie.split("; ")); //DEBUG!
     var parent = document.getElementById("dynamicList");
 
     for (var i = 0; i < getCookie("runningNo"); i++) {
@@ -30,7 +29,7 @@ function buildList() {
 
             var header = document.createElement("header");
             header.classList.add("w3-container");
-            header.classList.add("w3-light-gray");
+            header.classList.add("bar-color");
 
             var headertext = document.createElement("h3");
             headertext.classList.add("w3-left");
@@ -284,11 +283,11 @@ function saveDynamicDataToFile() {
                 fileString += "<false/>\n";
             }
             fileString += "</dict>\n";
-            fileString += "</array>\n";
         }
     }
     //DNS settings end
 
+    fileString += "</array>\n";
     fileString += "<key>PayloadDescription</key>\n";
     fileString += "<string>Adds different encrypted DNS configurations to Big Sur and iOS 14 based systems</string>\n";
     fileString += "<key>PayloadDisplayName</key>\n";
