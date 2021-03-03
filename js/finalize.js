@@ -114,6 +114,7 @@ function buildList() {
             infocontainer.appendChild(infop);
             carddiv.appendChild(infocontainer);
             parent.appendChild(carddiv);
+            document.getElementById("downloadBtn").disabled = false;
         }
     }
 }
