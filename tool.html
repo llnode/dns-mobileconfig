@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,27 +8,28 @@
     <link rel="stylesheet" href="css/w3.css">
     <link rel="stylesheet" href="css/form.css">
     <link rel="stylesheet" href="css/dark-mode.css">
-    <script src="js/FileSaver.min.js"></script>
     <script src="js/uuidv4.min.js"></script>
     <script src="js/tool.js"></script>
 </head>
+
 <body class="w3-container" onload="loadPremade()">
     <h1>Secure DNS profile creator</h1>
     <h2>For iOS 14 or later and macOS Big Sur or later</h2>
-    
+
     <div class="w3-bar w3-border bar-color">
         <a href="/" class="w3-bar-item w3-button w3-mobile">About</a>
         <a href="/tool.html" class="w3-bar-item w3-button w3-green w3-mobile">Tool</a>
         <a href="/premades.html" class="w3-bar-item w3-button w3-mobile">Pre-made profiles</a>
+        <a href="/finalize.html" class="w3-bar-item w3-button w3-mobile">Finalize profile</a>
         <a href="https://github.com/fyr77/dns-mobileconfig" class="w3-bar-item w3-button w3-right w3-black w3-mobile">GitHub</a>
         <a href="/legal.html" class="w3-bar-item w3-button w3-right w3-black w3-mobile">Legal</a>
     </div>
-    
+
     <br>
-    
+
     <h4><a href="/premades.html">Choose a pre-configured provider</a>, or enter your own settings:</h4>
-    
-    <form action="javascript:saveDynamicDataToFile()">
+
+    <form action="javascript:addToList()">
         <p>
             <label for="provName">Name of DNS provider:</label>
             <input type="text" id="provName" placeholder="MyCoolSecureProvider" required>
@@ -44,9 +46,11 @@
             <label for="dns2v4" class="optional">IPv4 secondary DNS:</label>
             <input type="text" id="dns2v4" placeholder="0.0.0.1">
             <label for="dns1v6" class="optional">IPv6 primary DNS:</label>
-            <input type="text" id="dns1v6" placeholder="0000:0000:0000:0000:0000:0000:0000:0000 - other formats also accepted">
+            <input type="text" id="dns1v6"
+                placeholder="0000:0000:0000:0000:0000:0000:0000:0000 - other formats also accepted">
             <label for="dns2v6" class="optional">IPv6 secondary DNS:</label>
-            <input type="text" id="dns2v6" placeholder="0000:0000:0000:0000:0000:0000:0000:0001 - other formats also accepted">
+            <input type="text" id="dns2v6"
+                placeholder="0000:0000:0000:0000:0000:0000:0000:0001 - other formats also accepted">
         </p>
         <p>
             <label for="serverUrl" id="dohdotServerLabel">DoH server URL:</label>
@@ -57,10 +61,11 @@
             <p>
                 <label for="exclWifi" class="optional">Excluded Wi-Fi Networks:</label>
                 <input type="text" id="exclWifi" placeholder="MyHomeNetwork, Silence of the LANs">
-                <span style="color: grey">Enter a comma-separated list of Wi-Fi networks (SSID) on which the encrypted DNS will be disabled.</span>
+                <span style="color: grey">Enter a comma-separated list of Wi-Fi networks (SSID) on which the encrypted
+                    DNS will be disabled.</span>
             </p>
             <p>
-                Interfaces to use encrypted DNS on: 
+                Interfaces to use encrypted DNS on:
                 <label for="useWifi">Wi-Fi</label>
                 <input type="checkbox" id="useWifi" checked>
                 <label for="useCell">Cellular</label>
@@ -72,10 +77,12 @@
                 <label for="lockProfile">Prohibit Disablement</label>
                 <input type="checkbox" id="lockProfile">
                 <br>
-                <span style="color: grey">Prohibit users from removing the profile. Only available on supervised devices.</span>
+                <span style="color: grey">Prohibit users from removing the profile. Only available on supervised
+                    devices.</span>
             </p>
         </div>
-        <p><input type="submit" class="button1" value="Download profile"></p>
+        <p><input type="submit" value="Add to profile"></p>
     </form>
 </body>
+
 </html>

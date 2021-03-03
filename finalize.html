@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>DNS Profile Creator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/w3.css">
+    <link rel="stylesheet" href="css/dark-mode.css">
+    <script src="js/FileSaver.min.js"></script>
+    <script src="js/uuidv4.min.js"></script>
+    <script src="js/finalize.js"></script>
+</head>
+
+<body class="w3-container">
+    <h1>Secure DNS profile creator</h1>
+    <h2>For iOS 14 or later and macOS Big Sur or later</h2>
+
+    <div class="w3-bar w3-border bar-color">
+        <a href="/" class="w3-bar-item w3-button w3-mobile">About</a>
+        <a href="/tool.html" class="w3-bar-item w3-button w3-mobile">Tool</a>
+        <a href="/premades.html" class="w3-bar-item w3-button w3-mobile">Pre-made profiles</a>
+        <a href="/finalize.html" class="w3-bar-item w3-button w3-mobile w3-green">Finalize profile</a>
+        <a href="https://github.com/fyr77/dns-mobileconfig" class="w3-bar-item w3-button w3-right w3-black w3-mobile">GitHub</a>
+        <a href="/legal.html" class="w3-bar-item w3-button w3-right w3-black w3-mobile">Legal</a>
+    </div>
+    <br>
+    <div id="dynamicList"></div>
+    <br>
+    <div class="w3-bar">
+        <button class="w3-button w3-bar-item w3-mobile w3-green" style="width:80%" onclick="saveDynamicDataToFile()">Download Profile</button>
+        <button class="w3-button w3-bar-item w3-mobile w3-dark-gray" style="width:20%" onclick="confirmDel()">Delete All</button>
+    </div>
+</body>
+
+</html>

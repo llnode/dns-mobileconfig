@@ -1,195 +1,56 @@
 function getCookie(cname) {
-  var name = cname + "=";
-  var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(';');
-  for(var i = 0; i <ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
-
-function deleteAllCookies() {
-    var cookies = document.cookie.split(";");
-
-    for (var i = 0; i < cookies.length; i++) {
-        var cookie = cookies[i];
-        var eqPos = cookie.indexOf("=");
-        var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure";
-    }
-}
-
-function getRegDNS() {
-    var dns1v4 = document.getElementById("dns1v4").value;
-    var dns2v4 = document.getElementById("dns2v4").value;
-    var dns1v6 = document.getElementById("dns1v6").value;
-    var dns2v6 = document.getElementById("dns2v6").value;
-    var ip4format = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    var ip6format = /^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$/;
-    
-    var returnstring = "<key>ServerAddresses</key>\n<array>\n";
-    var dnsOverride = false;
-
-    if (ip6format.test(dns1v6)) {
-        dnsOverride = true;
-        returnstring += "<string>" + dns1v6 + "</string>\n";
-    }
-    if (ip6format.test(dns2v6)) {
-        dnsOverride = true;
-        returnstring += "<string>" + dns2v6 + "</string>\n";
-    }
-    
-    if (ip4format.test(dns1v4)) {
-        dnsOverride = true;
-        returnstring += "<string>" + dns1v4 + "</string>\n";
-    }
-    if (ip4format.test(dns2v4)) {
-        dnsOverride = true;
-        returnstring += "<string>" + dns2v4 + "</string>\n";
-    }
-        
-    if (dnsOverride) {
-        returnstring += "</array>\n";
-        return returnstring;
-    }
-    else {
-        return "";
-    }
-}
-
-function saveDynamicDataToFile() {
-    var encryption = document.getElementsByName('encryption');
-    var encValue = null;
-    var provName = document.getElementById("provName").value;
-    
-    for (var i = 0, length = encryption.length; i < length; i++) {
-        if (encryption[i].checked) {
-            encValue = encryption[i].value;
-            // only one radio can be logically checked, don't check the rest
-            break;
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
         }
     }
-    var exclWifi = document.getElementById("exclWifi");
-        
-    var fileString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    fileString += "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n";
-    fileString += "<plist version=\"1.0\">\n";
-    fileString += "<dict>\n";
-    fileString += "<key>PayloadContent</key>\n";
-    fileString += "<array>\n";
-    fileString += "<dict>\n";
-    fileString += "<key>DNSSettings</key>\n";
-    fileString += "<dict>\n";
-    fileString += "<key>DNSProtocol</key>\n";
-    fileString += "<string>" + encValue + "</string>\n";
-    fileString += getRegDNS();
-    if (encValue == "HTTPS") {
-        fileString += "<key>ServerURL</key>\n";
-    }
-    else {
-        fileString += "<key>ServerName</key>\n";
-    }
-    fileString += "<string>" + document.getElementById("serverUrl").value + "</string>\n";
-    fileString += "</dict>\n";
-    fileString += "<key>OnDemandRules</key>\n";
-    fileString += "<array>\n";
-    if (exclWifi.value != "") {
-        fileString += "<dict>\n";
-        fileString += "<key>Action</key>\n";
-        fileString += "<string>Disconnect</string>\n";
-        fileString += "<key>SSIDMatch</key>\n"
-        fileString += "<array>\n";
-        exclWifi.value.split(/\s*,\s*/).forEach(function(wifiString) {
-            console.log(wifiString);
-            fileString += "<string>" + wifiString + "</string>\n";
-        });
-        fileString += "</array>\n";
-        fileString += "</dict>\n";
-        fileString += "<dict>\n";
-        fileString += "<key>Action</key>\n";
-        fileString += "<string>Connect</string>\n";
-        fileString += "</dict>\n";
-    }
-    if (document.getElementById("useWifi").checked) {
-        fileString += "<dict>\n";
-        fileString += "<key>Action</key>\n";
-        fileString += "<string>Connect</string>\n";
-        fileString += "<key>InterfaceTypeMatch</key>\n";
-        fileString += "<string>WiFi</string>\n";
-        fileString += "</dict>\n";
-    }
-    if (document.getElementById("useCell").checked) {
-        fileString += "<dict>\n";
-        fileString += "<key>Action</key>\n";
-        fileString += "<string>Connect</string>\n";
-        fileString += "<key>InterfaceTypeMatch</key>\n";
-        fileString += "<string>Cellular</string>\n";
-        fileString += "</dict>\n";
-    }
-    fileString += "<dict>\n";
-    fileString += "<key>Action</key>\n";
-    fileString += "<string>Disconnect</string>\n";
-    fileString += "</dict>\n";
-    fileString += "</array>\n";
-    fileString += "<key>PayloadDescription</key>\n";
-    fileString += "<string>Configures device to use " + provName + " Encrypted DNS over " + encValue + "</string>\n";
-    fileString += "<key>PayloadDisplayName</key>\n";
-    fileString += "<string>" + provName + " DNS over " + encValue + "</string>\n";
-    fileString += "<key>PayloadIdentifier</key>\n";
-    fileString += "<string>com.apple.dnsSettings.managed." + uuidv4() + "</string>\n";
-    fileString += "<key>PayloadType</key>\n";
-    fileString += "<string>com.apple.dnsSettings.managed</string>\n";
-    fileString += "<key>PayloadUUID</key>\n";
-    fileString += "<string>" + uuidv4() + "</string>\n";
-    fileString += "<key>PayloadVersion</key>\n";
-    fileString += "<integer>1</integer>\n";
-    fileString += "<key>ProhibitDisablement</key>\n";
-    if (document.getElementById("lockProfile").checked) {
-        fileString += "<true/>\n";
-    }
-    else {
-        fileString += "<false/>\n";
-    }
-    fileString += "</dict>\n";
-    fileString += "</array>\n";
-    fileString += "<key>PayloadDescription</key>\n";
-    fileString += "<string>Adds " + provName + " Encrypted DNS over " + encValue + " to Big Sur and iOS 14 based systems</string>\n";
-    fileString += "<key>PayloadDisplayName</key>\n";
-    fileString += "<string>" + provName + " DNS over " + encValue + "</string>\n";
-    fileString += "<key>PayloadIdentifier</key>\n";
-    fileString += "<string>com.notjakob.apple-dns." + uuidv4() + "</string>\n";
-    fileString += "<key>PayloadRemovalDisallowed</key>\n";
-    fileString += "<false/>\n";
-    fileString += "<key>PayloadType</key>\n";
-    fileString += "<string>Configuration</string>\n";
-    fileString += "<key>PayloadUUID</key>\n";
-    fileString += "<string>" + uuidv4() + "</string>\n";
-    fileString += "<key>PayloadVersion</key>\n";
-    fileString += "<integer>1</integer>\n";
-    fileString += "</dict>\n";
-    fileString += "</plist>";
-    
-    var blob = new Blob([fileString], { type: "text/plain;charset=utf-8" });
-    
-    deleteAllCookies();
-
-    saveAs(blob, "dns.mobileconfig");
+    return "";
 }
-        
+
+function addToList() {
+    var runningNo = getCookie("runningNo");
+    if (getCookie("runningNo") == "") {
+        runningNo = 0;
+    }
+    
+    var d = new Date();
+    d.setTime(d.getTime() + (86400000)); //expires in 24h
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = runningNo + "provName=" + document.getElementById("provName").value + ";" + expires + ";path=/; SameSite=Strict; Secure";
+    document.cookie = runningNo + "doh=" + document.getElementById("doh").checked + ";" + expires + ";path=/; SameSite=Strict; Secure";
+    document.cookie = runningNo + "dns1v4=" + document.getElementById("dns1v4").value + ";" + expires + ";path=/; SameSite=Strict; Secure";
+    document.cookie = runningNo + "dns2v4=" + document.getElementById("dns2v4").value + ";" + expires + ";path=/; SameSite=Strict; Secure";
+    document.cookie = runningNo + "dns1v6=" + document.getElementById("dns1v6").value + ";" + expires + ";path=/; SameSite=Strict; Secure";
+    document.cookie = runningNo + "dns2v6=" + document.getElementById("dns2v6").value + ";" + expires + ";path=/; SameSite=Strict; Secure";
+    document.cookie = runningNo + "serverUrl=" + document.getElementById("serverUrl").value + ";" + expires + ";path=/; SameSite=Strict; Secure";
+    document.cookie = runningNo + "exclWifi=" + document.getElementById("exclWifi").value + ";" + expires + ";path=/; SameSite=Strict; Secure";
+    document.cookie = runningNo + "useWifi=" + document.getElementById("useWifi").checked + ";" + expires + ";path=/; SameSite=Strict; Secure";
+    document.cookie = runningNo + "useCell=" + document.getElementById("useCell").checked + ";" + expires + ";path=/; SameSite=Strict; Secure";
+    document.cookie = runningNo + "lockProfile=" + document.getElementById("lockProfile").checked + ";" + expires + ";path=/; SameSite=Strict; Secure";
+
+    runningNo++;
+    document.cookie = "runningNo=" + runningNo + ";" + expires + ";path=/; SameSite=Strict; Secure";
+
+    window.location.href = "/finalize.html"
+}
+
 function switchToHTTPS() {
     document.getElementById("serverUrl").placeholder = "https://example.com/query" + document.getElementById("serverUrl").value;
     document.getElementById("dohdotServerLabel").innerHTML = "DoH server URL:";
 }
+
 function switchToTLS() {
     document.getElementById("serverUrl").placeholder = "dot.example.com";
     document.getElementById("dohdotServerLabel").innerHTML = "DoT server URL:";
 }
+
 function loadPremade() {
     var provName = document.getElementById("provName");
     var checkDoH = document.getElementById("doh");
@@ -199,7 +60,7 @@ function loadPremade() {
     var dns1v6 = document.getElementById("dns1v6");
     var dns2v6 = document.getElementById("dns2v6");
     var serverUrl = document.getElementById("serverUrl");
-    
+
     provName.value = getCookie("provName");
     if (getCookie("doh") == "true") {
         checkDoH.checked = true;
@@ -212,13 +73,13 @@ function loadPremade() {
     dns2v6.value = getCookie("dns2v6");
     serverUrl.value = getCookie("serverUrl");
 }
+
 function accordion() {
     var adv = document.getElementById("advanced_container");
     if (adv.className.indexOf("w3-show") == -1) {
         adv.className += " w3-show";
         adv.previousElementSibling.className = adv.previousElementSibling.className.replace("w3-dark-grey", "w3-black");
-    }
-    else {
+    } else {
         adv.className = adv.className.replace(" w3-show", "");
         adv.previousElementSibling.className = adv.previousElementSibling.className.replace("w3-black", "w3-dark-grey");
     }
