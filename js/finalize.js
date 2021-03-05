@@ -211,7 +211,7 @@ function saveDynamicDataToFile() {
             } else {
                 encValue = "TLS";
             }
-            var exclWifi = getCookie(i + "")
+            var exclWifi = getCookie(i + "exclWifi")
 
             fileString += "<dict>\n";
             fileString += "<key>DNSSettings</key>\n";

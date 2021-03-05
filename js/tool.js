@@ -35,10 +35,10 @@ function addToList() {
     document.cookie = runningNo + "useCell=" + document.getElementById("useCell").checked + ";" + expires + ";path=/; SameSite=Strict; Secure";
     document.cookie = runningNo + "lockProfile=" + document.getElementById("lockProfile").checked + ";" + expires + ";path=/; SameSite=Strict; Secure";
 
-    runningNo++;
+    runningNo = runningNo + 1;
     document.cookie = "runningNo=" + runningNo + ";" + expires + ";path=/; SameSite=Strict; Secure";
 
-    window.location.href = "/finalize.html"
+    window.location.href = "/finalize.html";
 }
 
 function switchToHTTPS() {
