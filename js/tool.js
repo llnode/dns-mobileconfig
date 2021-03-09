@@ -23,14 +23,14 @@ function addToList() {
     var d = new Date();
     d.setTime(d.getTime() + (86400000)); //expires in 24h
     var expires = "expires="+ d.toUTCString();
-    document.cookie = runningNo + "provName=" + document.getElementById("provName").value + ";" + expires + ";path=/; SameSite=Strict; Secure";
+    document.cookie = runningNo + "provName=" + encodeURIComponent(document.getElementById("provName").value) + ";" + expires + ";path=/; SameSite=Strict; Secure";
     document.cookie = runningNo + "doh=" + document.getElementById("doh").checked + ";" + expires + ";path=/; SameSite=Strict; Secure";
     document.cookie = runningNo + "dns1v4=" + document.getElementById("dns1v4").value + ";" + expires + ";path=/; SameSite=Strict; Secure";
     document.cookie = runningNo + "dns2v4=" + document.getElementById("dns2v4").value + ";" + expires + ";path=/; SameSite=Strict; Secure";
     document.cookie = runningNo + "dns1v6=" + document.getElementById("dns1v6").value + ";" + expires + ";path=/; SameSite=Strict; Secure";
     document.cookie = runningNo + "dns2v6=" + document.getElementById("dns2v6").value + ";" + expires + ";path=/; SameSite=Strict; Secure";
     document.cookie = runningNo + "serverUrl=" + document.getElementById("serverUrl").value + ";" + expires + ";path=/; SameSite=Strict; Secure";
-    document.cookie = runningNo + "exclWifi=" + document.getElementById("exclWifi").value + ";" + expires + ";path=/; SameSite=Strict; Secure";
+    document.cookie = runningNo + "exclWifi=" + encodeURIComponent(document.getElementById("exclWifi").value) + ";" + expires + ";path=/; SameSite=Strict; Secure";
     document.cookie = runningNo + "useWifi=" + document.getElementById("useWifi").checked + ";" + expires + ";path=/; SameSite=Strict; Secure";
     document.cookie = runningNo + "useCell=" + document.getElementById("useCell").checked + ";" + expires + ";path=/; SameSite=Strict; Secure";
     document.cookie = runningNo + "lockProfile=" + document.getElementById("lockProfile").checked + ";" + expires + ";path=/; SameSite=Strict; Secure";

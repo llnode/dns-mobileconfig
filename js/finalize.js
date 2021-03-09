@@ -33,7 +33,7 @@ function buildList() {
 
             var headertext = document.createElement("h3");
             headertext.classList.add("w3-left");
-            headertext.appendChild(document.createTextNode(getCookie(i + "provName")));
+            headertext.appendChild(document.createTextNode(decodeURIComponent(getCookie(i + "provName"))));
 
             var headerdel = document.createElement("button");
             headerdel.classList.add("w3-button");
@@ -60,7 +60,7 @@ function buildList() {
             var dns2v4 = getCookie(i + "dns2v4");
             var dns1v6 = getCookie(i + "dns1v6");
             var dns2v6 = getCookie(i + "dns2v6");
-            var exclWifi = getCookie(i + "exclWifi");
+            var exclWifi = decodeURIComponent(getCookie(i + "exclWifi"));
 
             if (dns1v4 != "") {
                 infostring = "Primary IPv4 DNS Server: " + getCookie(i + "dns1v4");
@@ -211,7 +211,7 @@ function saveDynamicDataToFile() {
             } else {
                 encValue = "TLS";
             }
-            var exclWifi = getCookie(i + "exclWifi")
+            var exclWifi = decodeURIComponent(getCookie(i + "exclWifi"));
 
             fileString += "<dict>\n";
             fileString += "<key>DNSSettings</key>\n";
