@@ -19,5 +19,5 @@ function createCookie (provName, doh, dns1v4, dns2v4, dns1v6, dns2v6, serverUrl)
     document.cookie = "dns2v6=" + dns2v6 + ";" + expires + ";path=/; SameSite=Strict; Secure";
     document.cookie = "serverUrl=" + serverUrl + ";" + expires + ";path=/; SameSite=Strict; Secure";
     
-    window.location.href = "/tool.html"
+    window.location.href = "tool.html"
 }

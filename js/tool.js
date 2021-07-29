@@ -38,7 +38,7 @@ function addToList() {
     runningNo = runningNo + 1;
     document.cookie = "runningNo=" + runningNo + ";" + expires + ";path=/; SameSite=Strict; Secure";
 
-    window.location.href = "/finalize.html";
+    window.location.href = "finalize.html";
 }
 
 function switchToHTTPS() {
