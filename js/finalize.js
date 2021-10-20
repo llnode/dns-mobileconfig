@@ -307,7 +307,7 @@ function saveDynamicDataToFile() {
     fileString += "</plist>";
 
     var blob = new Blob([fileString], {
-        type: "text/plain;charset=utf-8"
+        type: "application/octet-stream;charset=utf-8"
     });
 
     deleteAllCookies();
