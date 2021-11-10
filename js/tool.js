@@ -78,5 +78,5 @@ function getDataFromUpload() {
 
 function handleProfileText(uploadedProfile) {
     //TODO
-    
+    //Important: Handle missing info in file: alert and abort!
 }
