@@ -12,13 +12,12 @@
     <script src="js/tool.js"></script>
 </head>
 
-<body class="w3-container" onload="loadPremade()">
+<body class="w3-container">
     <h1>Secure DNS profile creator</h1>
     <h2>For iOS 14 or later and macOS Big Sur or later</h2>
 
     <div class="w3-bar w3-border bar-color">
         <a href="index.html" class="w3-bar-item w3-button w3-mobile">About</a>
-        <a href="premades.html" class="w3-bar-item w3-button w3-mobile">Pre-made profiles</a>
         <a href="tool.html" class="w3-bar-item w3-button w3-green w3-mobile">Tool</a>
         <a href="finalize.html" class="w3-bar-item w3-button w3-mobile">Finalize</a>
         <a href="https://github.com/fyr77/dns-mobileconfig" class="w3-bar-item w3-button w3-right w3-black w3-mobile">GitHub</a>
@@ -28,7 +27,8 @@
 
     <br>
 
-    <h4><a href="/premades.html">Choose a pre-configured provider</a>, or enter your own settings:</h4>
+    <h4>Upload a pre-configured profile: <input type="file" id="fileupload" onchange="getDataFromUpload()"></h4>
+    <h4>or enter your own settings:</h4>
 
     <form action="javascript:addToList()">
         <p>

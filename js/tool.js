@@ -51,29 +51,6 @@ function switchToTLS() {
     document.getElementById("dohdotServerLabel").innerHTML = "DoT server URL:";
 }
 
-function loadPremade() {
-    var provName = document.getElementById("provName");
-    var checkDoH = document.getElementById("doh");
-    var checkDoT = document.getElementById("dot");
-    var dns1v4 = document.getElementById("dns1v4");
-    var dns2v4 = document.getElementById("dns2v4");
-    var dns1v6 = document.getElementById("dns1v6");
-    var dns2v6 = document.getElementById("dns2v6");
-    var serverUrl = document.getElementById("serverUrl");
-
-    provName.value = getCookie("provName");
-    if (getCookie("doh") == "true") {
-        checkDoH.checked = true;
-    } else if (getCookie("doh") == "false") {
-        checkDoT.checked = true;
-    }
-    dns1v4.value = getCookie("dns1v4");
-    dns2v4.value = getCookie("dns2v4");
-    dns1v6.value = getCookie("dns1v6");
-    dns2v6.value = getCookie("dns2v6");
-    serverUrl.value = getCookie("serverUrl");
-}
-
 function accordion() {
     var adv = document.getElementById("advanced_container");
     if (adv.className.indexOf("w3-show") == -1) {
@@ -83,4 +60,23 @@ function accordion() {
         adv.className = adv.className.replace(" w3-show", "");
         adv.previousElementSibling.className = adv.previousElementSibling.className.replace("w3-black", "w3-dark-grey");
     }
+}
+
+function getDataFromUpload() {
+    const selectedFile = document.getElementById('fileupload').files[0];
+    var read = new FileReader();
+
+    read.addEventListener("load", () => {
+        // this will save file to string
+        handleProfileText(read.result);
+    }, false);
+
+    if (selectedFile) {
+        read.readAsText(selectedFile);
+    }
+}
+
+function handleProfileText(uploadedProfile) {
+    //TODO
+    
 }
