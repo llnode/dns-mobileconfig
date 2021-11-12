@@ -15,8 +15,8 @@ function getCookie(cname) {
 }
 
 function addToList() {
-    if (document.getElementById("serverUrl").value.includes(":")) {
-        alert("Entering custom ports (e.g. :853) is not supported. Please remove it.");
+    if (document.getElementById("dot").checked && document.getElementById("serverUrl").value.includes(":")) {
+        alert("Entering custom ports (e.g. :853) for DoT is not supported. Please remove it.");
     }
     else {
         var runningNo = getCookie("runningNo");
@@ -39,10 +39,11 @@ function addToList() {
         document.cookie = runningNo + "useCell=" + document.getElementById("useCell").checked + ";" + expires + ";path=/; SameSite=Strict; Secure";
         document.cookie = runningNo + "lockProfile=" + document.getElementById("lockProfile").checked + ";" + expires + ";path=/; SameSite=Strict; Secure";
     
-        runningNo = runningNo + 1;
+        runningNo = parseInt(runningNo) + 1;
         document.cookie = "runningNo=" + runningNo + ";" + expires + ";path=/; SameSite=Strict; Secure";
-    
-        window.location.href = "finalize.html";
+
+        alert("Configuration added to profile.");
+        populateDropDown();
     }
 }
 
@@ -86,7 +87,7 @@ function handleProfileText(uploadedProfile) {
     console.log(profile);
 
     //Name
-    document.getElementById("provName").value = profile.PayloadDisplayName;
+    document.getElementById("provName").value = profile.PayloadContent[0].PayloadDisplayName;
 
     //Protocol and URL/ServerName
     if (profile.PayloadContent[0].DNSSettings.DNSProtocol == "HTTPS") {
@@ -155,4 +156,43 @@ function handleProfileText(uploadedProfile) {
             });
         }
     });
+}
+
+function populateDropDown() {
+    document.getElementById("configSelect").options.length = 0; //Delete all options
+    var runningNo = getCookie("runningNo");
+
+    if (runningNo != "" && runningNo) {
+        for (let index = 0; index < runningNo; index++) {
+            var option = document.createElement("option");
+            option.text = getCookie(index + "provName");
+            document.getElementById("configSelect").add(option);
+        }
+    }
+}
+
+function loadSaved() {
+    var selectedIndex = document.getElementById("configSelect").selectedIndex ;
+    console.log(selectedIndex);
+
+    document.getElementById("provName").value = getCookie(selectedIndex + "provName");
+    if (getCookie(selectedIndex + "doh") === "true") {
+        document.getElementById("doh").checked = true;
+    }
+    else {
+        document.getElementById("dot").checked = true;
+    }
+    document.getElementById("dns1v4").value = getCookie(selectedIndex + "dns1v4");
+    document.getElementById("dns2v4").value = getCookie(selectedIndex + "dns2v4");
+    document.getElementById("dns1v6").value = getCookie(selectedIndex + "dns1v6");
+    document.getElementById("dns2v6").value = getCookie(selectedIndex + "dns2v6");
+    document.getElementById("serverUrl").value = getCookie(selectedIndex + "serverUrl");
+    document.getElementById("exclWifi").value = getCookie(selectedIndex + "exclWifi");
+    document.getElementById("useWifi").checked = (getCookie(selectedIndex + "useWifi") === "true");
+    document.getElementById("useCell").checked = (getCookie(selectedIndex + "useCell") === "true");
+    document.getElementById("lockProfile").checked = (getCookie(selectedIndex + "lockProfile") === "true");
+}
+
+function newConfig() {
+    window.location.reload(true);
 }

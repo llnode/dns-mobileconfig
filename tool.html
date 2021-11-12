@@ -13,7 +13,7 @@
     <script src="js/tool.js"></script>
 </head>
 
-<body class="w3-container">
+<body class="w3-container" onload="populateDropDown()">
     <h1>Secure DNS profile creator</h1>
     <h2>For iOS 14 or later and macOS Big Sur or later</h2>
 
@@ -30,6 +30,8 @@
 
     <h4>Upload a pre-configured profile: <input type="file" id="fileupload" onchange="getDataFromUpload()"></h4>
     <h4>or enter your own settings:</h4>
+
+    <p>Edit saved configurations (<a href="javascript:newConfig()">create new</a>): <select id="configSelect" onchange="loadSaved()"></select></p>
 
     <form action="javascript:addToList()">
         <p>
