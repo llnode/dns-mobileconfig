@@ -18,6 +18,15 @@ function deleteCard(cardNo) {
     document.cookie = cardNo + "lockProfile=;expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure";
 }
 
+function editCard(cardNo) {
+    var d = new Date();
+    d.setTime(d.getTime() + (86400000)); //expires in 24h
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = "editSelected=" + cardNo + ";" + expires + ";path=/; SameSite=Strict; Secure";
+
+    window.location.href = 'tool.html';
+}
+
 function buildList() {
     var parent = document.getElementById("dynamicList");
 
@@ -40,8 +49,14 @@ function buildList() {
             headerdel.classList.add("w3-red");
             headerdel.classList.add("w3-right")
             headerdel.innerHTML = "X";
-
             headerdel.setAttribute("onclick", 'deleteCard(' + i + ')');
+
+            var headeredit = document.createElement("button");
+            headeredit.classList.add("w3-button");
+            headeredit.classList.add("w3-dark-gray");
+            headeredit.classList.add("w3-right")
+            headeredit.innerHTML = "Edit";
+            headeredit.setAttribute("onclick", 'editCard(' + i + ')');
 
             var infocontainer = document.createElement("div");
             infocontainer.classList.add("w3-container");
@@ -106,10 +121,9 @@ function buildList() {
             }
             infop.appendChild(document.createTextNode(infostring));
 
-
-
             header.appendChild(headertext);
             header.appendChild(headerdel);
+            header.appendChild(headeredit);
             carddiv.appendChild(header);
             infocontainer.appendChild(infop);
             carddiv.appendChild(infocontainer);

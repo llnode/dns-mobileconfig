@@ -13,7 +13,7 @@
     <script src="js/tool.js"></script>
 </head>
 
-<body class="w3-container" onload="populateDropDown()">
+<body class="w3-container" onload="checkLoadEdit()">
     <h1>Secure DNS profile creator</h1>
     <h2>For iOS 14 or later and macOS Big Sur or later</h2>
 
@@ -23,7 +23,7 @@
         <a href="finalize.html" class="w3-bar-item w3-button w3-mobile">Finalize</a>
         <a href="https://github.com/fyr77/dns-mobileconfig" class="w3-bar-item w3-button w3-right w3-black w3-mobile">GitHub</a>
         <a href="legal.html" class="w3-bar-item w3-button w3-right w3-black w3-mobile">Legal</a>
-        <a href="https://encrypted-dns.party/" class="w3-bar-item w3-button w3-right w3-blue-grey w3-mobile">Encrypted DNS Party</a>
+        <a href="https://encrypted-dns.party/" target="_blank" class="w3-bar-item w3-button w3-right w3-blue-grey w3-mobile">Encrypted DNS Party</a>
     </div>
 
     <br>
@@ -31,9 +31,7 @@
     <h4>Upload a pre-configured profile: <input type="file" id="fileupload" onchange="getDataFromUpload()"></h4>
     <h4>or enter your own settings:</h4>
 
-    <p>Edit saved configurations (<a href="javascript:newConfig()">create new</a>): <select id="configSelect" onchange="loadSaved()"></select></p>
-
-    <form action="javascript:addToList()">
+    <form id="mainForm" action="javascript:addToList()">
         <p>
             <label for="provName">Name of DNS provider:</label>
             <input type="text" id="provName" placeholder="MyCoolSecureProvider" required>
@@ -85,7 +83,7 @@
                     devices.</span>
             </p>
         </div>
-        <p><input type="submit" value="Add to profile"></p>
+        <p><input id="btn_addToProfile" type="submit" value="Add to profile"></p>
     </form>
 </body>
 
