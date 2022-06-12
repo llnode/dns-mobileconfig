@@ -253,10 +253,6 @@ function saveDynamicDataToFile() {
                 });
                 fileString += "</array>\n";
                 fileString += "</dict>\n";
-                fileString += "<dict>\n";
-                fileString += "<key>Action</key>\n";
-                fileString += "<string>Connect</string>\n";
-                fileString += "</dict>\n";
             }
             if (getCookie(i + "useWifi") == "true") {
                 fileString += "<dict>\n";
