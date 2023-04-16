@@ -283,9 +283,25 @@ function saveDynamicDataToFile() {
     var fullplist = plist.build(profilejson);
     var blob = new Blob([fullplist], {type: "application/octet-stream;charset=utf-8"});
 
-    deleteAllCookies();
+    var filename = "";
+    var fd = new FormData();
+    fd.append('data', blob);
+    fd.append('sign', document.getElementById("signChk").checked);
+    let request = new XMLHttpRequest();
+    request.open("POST", "backend.php", true);
+    request.onload = function() {
+        if (this.status >= 200 && this.status < 400) {
+            let msg = this.response;
+            filename = this.response;
+            window.location.href = "/files/" + filename;
+        }
+    }
+    request.onerror = function(bla, msg) {
+        alert("Fail: " + msg);
+    };
+    request.send(fd);
 
-    saveAs(blob, "dns.mobileconfig");
+    deleteAllCookies();
 }
 
 function confirmDel() {
