@@ -20,8 +20,8 @@ function deleteCard(cardNo) {
 
 function editCard(cardNo) {
     var d = new Date();
-    d.setTime(d.getTime() + (86400000)); //expires in 24h
-    var expires = "expires="+ d.toUTCString();
+    d.setTime(d.getTime() + (86400000)); // expires in 24h
+    var expires = "expires=" + d.toUTCString();
     document.cookie = "editSelected=" + cardNo + ";" + expires + ";path=/; SameSite=Strict; Secure";
 
     window.location.href = 'tool.html';
@@ -68,8 +68,7 @@ function buildList() {
                 infostring += "DNS-over-HTTPS";
             } else {
                 infostring += "DNS-over-TLS";
-            }
-            infop.appendChild(document.createTextNode(infostring));
+            } infop.appendChild(document.createTextNode(infostring));
             infop.appendChild(document.createElement("br"));
             var dns1v4 = getCookie(i + "dns1v4");
             var dns2v4 = getCookie(i + "dns2v4");
@@ -178,47 +177,41 @@ function getRegDNS(iterator) {
     var ip4format = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     var ip6format = /^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$/;
 
-    var returnstring = "<key>ServerAddresses</key>\n<array>\n";
-    var dnsOverride = false;
+    var returnarray = [];
 
     if (ip6format.test(dns1v6)) {
-        dnsOverride = true;
-        returnstring += "<string>" + dns1v6 + "</string>\n";
+        returnarray.push(dns1v6);
     }
     if (ip6format.test(dns2v6)) {
-        dnsOverride = true;
-        returnstring += "<string>" + dns2v6 + "</string>\n";
+        returnarray.push(dns2v6);
     }
 
     if (ip4format.test(dns1v4)) {
-        dnsOverride = true;
-        returnstring += "<string>" + dns1v4 + "</string>\n";
+        returnarray.push(dns1v4);
     }
     if (ip4format.test(dns2v4)) {
-        dnsOverride = true;
-        returnstring += "<string>" + dns2v4 + "</string>\n";
+        returnarray.push(dns2v4);
     }
 
-    if (dnsOverride) {
-        returnstring += "</array>\n";
-        return returnstring;
-    } else {
-        return "";
-    }
+    return returnarray;
 }
 
 function saveDynamicDataToFile() {
-    var fileString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    fileString += "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n";
-    fileString += "<plist version=\"1.0\">\n";
-    fileString += "<dict>\n";
-    fileString += "<key>PayloadContent</key>\n";
-    fileString += "<array>\n";
+    //Basic json info
+    var profilejson = {
+        PayloadContent: [],
+        PayloadDescription: "Adds different encrypted DNS configurations to Big Sur and iOS 14 based systems",
+        PayloadDisplayName: "Encrypted DNS (DoH, DoT)",
+        PayloadIdentifier: "com.notjakob.apple-dns." + uuidv4(),
+        PayloadRemovalDisallowed: false,
+        PayloadType: "Configuration",
+        PayloadUUID: uuidv4(),
+        PayloadVersion: 1
+    }
 
-    //DNS settings start
     for (var i = 0; i < getCookie("runningNo"); i++) {
         var provName = getCookie(i + "provName");
-        if (provName != "") { //This check is to avoid empty configurations leftover by deletion.
+        if (provName != "") { // This check is to avoid empty configurations leftover by deletion.
             var encValue = null;
             if (getCookie(i + "doh") == "true") {
                 encValue = "HTTPS";
@@ -227,98 +220,68 @@ function saveDynamicDataToFile() {
             }
             var exclWifi = decodeURIComponent(getCookie(i + "exclWifi"));
 
-            fileString += "<dict>\n";
-            fileString += "<key>DNSSettings</key>\n";
-            fileString += "<dict>\n";
-            fileString += "<key>DNSProtocol</key>\n";
-            fileString += "<string>" + encValue + "</string>\n";
-            fileString += getRegDNS(i);
+            var settings = {
+                DNSSettings: {
+                    DNSProtocol: encValue,
+                    ServerAddresses: getRegDNS(i)
+                },
+                OnDemandRules: [],
+                PayloadDescription: "Configures device to use " + provName + " Encrypted DNS over " + encValue,
+                PayloadDisplayName: provName + " DNS over " + encValue,
+                PayloadIdentifier: "com.apple.dnsSettings.managed." + uuidv4(),
+                PayloadType: "com.apple.dnsSettings.managed",
+                PayloadUUID: uuidv4(),
+                PayloadVersion: 1
+            }
+
             if (encValue == "HTTPS") {
-                fileString += "<key>ServerURL</key>\n";
+                settings.DNSSettings.ServerURL = getCookie(i + "serverUrl");
             } else {
-                fileString += "<key>ServerName</key>\n";
+                settings.DNSSettings.ServerName =getCookie(i + "serverUrl");
             }
-            fileString += "<string>" + getCookie(i + "serverUrl") + "</string>\n";
-            fileString += "</dict>\n";
-            fileString += "<key>OnDemandRules</key>\n";
-            fileString += "<array>\n";
-            if (exclWifi != "") {
-                fileString += "<dict>\n";
-                fileString += "<key>Action</key>\n";
-                fileString += "<string>Disconnect</string>\n";
-                fileString += "<key>SSIDMatch</key>\n"
-                fileString += "<array>\n";
-                exclWifi.split(/\s*,\s*/).forEach(function (wifiString) {
-                    fileString += "<string>" + wifiString + "</string>\n";
-                });
-                fileString += "</array>\n";
-                fileString += "</dict>\n";
-            }
-            if (getCookie(i + "useWifi") == "true") {
-                fileString += "<dict>\n";
-                fileString += "<key>Action</key>\n";
-                fileString += "<string>Connect</string>\n";
-                fileString += "<key>InterfaceTypeMatch</key>\n";
-                fileString += "<string>WiFi</string>\n";
-                fileString += "</dict>\n";
-            }
-            if (getCookie(i + "useCell") == "true") {
-                fileString += "<dict>\n";
-                fileString += "<key>Action</key>\n";
-                fileString += "<string>Connect</string>\n";
-                fileString += "<key>InterfaceTypeMatch</key>\n";
-                fileString += "<string>Cellular</string>\n";
-                fileString += "</dict>\n";
-            }
-            fileString += "<dict>\n";
-            fileString += "<key>Action</key>\n";
-            fileString += "<string>Disconnect</string>\n";
-            fileString += "</dict>\n";
-            fileString += "</array>\n";
-            fileString += "<key>PayloadDescription</key>\n";
-            fileString += "<string>Configures device to use " + provName + " Encrypted DNS over " + encValue + "</string>\n";
-            fileString += "<key>PayloadDisplayName</key>\n";
-            fileString += "<string>" + provName + " DNS over " + encValue + "</string>\n";
-            fileString += "<key>PayloadIdentifier</key>\n";
-            fileString += "<string>com.apple.dnsSettings.managed." + uuidv4() + "</string>\n";
-            fileString += "<key>PayloadType</key>\n";
-            fileString += "<string>com.apple.dnsSettings.managed</string>\n";
-            fileString += "<key>PayloadUUID</key>\n";
-            fileString += "<string>" + uuidv4() + "</string>\n";
-            fileString += "<key>PayloadVersion</key>\n";
-            fileString += "<integer>1</integer>\n";
-            fileString += "<key>ProhibitDisablement</key>\n";
+
             if (getCookie(i + "lockProfile") == "true") {
-                fileString += "<true/>\n";
+                settings.ProhibitDisablement = true;
             } else {
-                fileString += "<false/>\n";
+                settings.ProhibitDisablement = false;
             }
-            fileString += "</dict>\n";
+
+            if (exclWifi != "") {
+                var wifirules = {
+                    Action: "Disconnect",
+                    SSIDMatch: []
+                }
+                exclWifi.split(/\s*,\s*/).forEach(function (wifiString) {
+                    wifirules.SSIDMatch.push(wifiString);
+                });
+
+                settings.OnDemandRules.push(wifirules);
+            }
+
+            if (getCookie(i + "useWifi") == "true") {
+                settings.OnDemandRules.push({
+                    Action: "Connect",
+                    InterfaceTypeMatch: "WiFi"
+                });
+            }
+
+            if (getCookie(i + "useCell") == "true") {
+                settings.OnDemandRules.push({
+                    Action: "Connect",
+                    InterfaceTypeMatch: "Cellular"
+                });
+            }
+
+            settings.OnDemandRules.push({
+                Action: "Disconnect"
+            });
+
+            profilejson.PayloadContent.push(settings);
         }
     }
-    //DNS settings end
 
-    fileString += "</array>\n";
-    fileString += "<key>PayloadDescription</key>\n";
-    fileString += "<string>Adds different encrypted DNS configurations to Big Sur and iOS 14 based systems</string>\n";
-    fileString += "<key>PayloadDisplayName</key>\n";
-    fileString += "<string>Encrypted DNS (DoH, DoT)</string>\n";
-    fileString += "<key>PayloadIdentifier</key>\n";
-    fileString += "<string>com.notjakob.apple-dns." + uuidv4() + "</string>\n";
-    fileString += "<key>PayloadRemovalDisallowed</key>\n";
-    fileString += "<false/>\n";
-    fileString += "<key>PayloadType</key>\n";
-    fileString += "<string>Configuration</string>\n";
-    fileString += "<key>PayloadUUID</key>\n";
-    fileString += "<string>" + uuidv4() + "</string>\n";
-    fileString += "<key>PayloadVersion</key>\n";
-    fileString += "<integer>1</integer>\n";
-    fileString += "</dict>\n";
-    fileString += "</plist>";
-
-    var blob = new Blob([fileString], {
-        type: "application/octet-stream;charset=utf-8"
-    });
+    var fullplist = plist.build(profilejson);
+    var blob = new Blob([fullplist], {type: "application/octet-stream;charset=utf-8"});
 
     deleteAllCookies();
 
