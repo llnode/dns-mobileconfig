@@ -253,8 +253,6 @@ function loadSimpleProfile(profile) {
     //Allow Wi-Fi and Cellular, check for excluded SSIDs and domains
     if (profile.PayloadContent[0].OnDemandRules) {
         profile.PayloadContent[0].OnDemandRules.forEach(rule => {
-            console.log(rule);
-
             if (rule.InterfaceTypeMatch == "WiFi") {
                 if (rule.Action == "Connect") {
                     document.getElementById("useWifi").checked = true;

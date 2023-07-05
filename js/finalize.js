@@ -266,7 +266,7 @@ function saveDynamicDataToFile() {
                         }
                     ]
                 }
-                exclWifi.split(/\s*,\s*/).forEach(function (domainString) {
+                exclDomains.split(/\s*,\s*/).forEach(function (domainString) {
                     domainrules.ActionParameters[0].Domains.push(domainString);
                 });
 
