@@ -1,5 +1,4 @@
 window.onload = function () {
-    deleteTempCookies();
     buildList();
 }
 
@@ -13,6 +12,7 @@ function deleteCard(cardNo) {
     document.cookie = cardNo + "dns2v6=;expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure";
     document.cookie = cardNo + "serverUrl=;expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure";
     document.cookie = cardNo + "exclWifi=;expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure";
+    document.cookie = cardNo + "exclDomains=;expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure";
     document.cookie = cardNo + "useWifi=;expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure";
     document.cookie = cardNo + "useCell=;expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure";
     document.cookie = cardNo + "lockProfile=;expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure";
@@ -75,6 +75,7 @@ function buildList() {
             var dns1v6 = getCookie(i + "dns1v6");
             var dns2v6 = getCookie(i + "dns2v6");
             var exclWifi = decodeURIComponent(getCookie(i + "exclWifi"));
+            var exclDomains = decodeURIComponent(getCookie(i + "exclDomains"));
 
             if (dns1v4 != "") {
                 infostring = "Primary IPv4 DNS Server: " + getCookie(i + "dns1v4");
@@ -107,6 +108,12 @@ function buildList() {
                 infop.appendChild(document.createElement("br"));
             }
 
+            if (exclDomains != "") {
+                infostring = "Excluded domains: " + exclDomains;
+                infop.appendChild(document.createTextNode(infostring));
+                infop.appendChild(document.createElement("br"));
+            }
+
             infostring = "";
 
             if (getCookie(i + "useWifi") == "true") {
@@ -130,16 +137,6 @@ function buildList() {
             document.getElementById("downloadBtn").disabled = false;
         }
     }
-}
-
-function deleteTempCookies() {
-    document.cookie = "provName=;expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure";
-    document.cookie = "doh=;expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure";
-    document.cookie = "dns1v4=;expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure";
-    document.cookie = "dns2v4=;expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure";
-    document.cookie = "dns1v6=;expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure";
-    document.cookie = "dns2v6=;expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure";
-    document.cookie = "serverUrl=;expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure";
 }
 
 function getCookie(cname) {
@@ -200,7 +197,7 @@ function saveDynamicDataToFile() {
     //Basic json info
     var profilejson = {
         PayloadContent: [],
-        PayloadDescription: "Adds different encrypted DNS configurations to Big Sur and iOS 14 based systems",
+        PayloadDescription: "Adds different encrypted DNS configurations to Big Sur (or newer) and iOS 14 (or newer) based systems",
         PayloadDisplayName: "Encrypted DNS (DoH, DoT)",
         PayloadIdentifier: "com.notjakob.apple-dns." + uuidv4(),
         PayloadRemovalDisallowed: false,
@@ -219,6 +216,7 @@ function saveDynamicDataToFile() {
                 encValue = "TLS";
             }
             var exclWifi = decodeURIComponent(getCookie(i + "exclWifi"));
+            var exclDomains = decodeURIComponent(getCookie(i + "exclDomains"));
 
             var settings = {
                 DNSSettings: {
@@ -256,6 +254,23 @@ function saveDynamicDataToFile() {
                 });
 
                 settings.OnDemandRules.push(wifirules);
+            }
+
+            if (exclDomains != "") {
+                var domainrules = {
+                    Action: "EvaluateConnection",
+                    ActionParameters: [
+                        {
+                            DomainAction: "NeverConnect",
+                            Domains: []
+                        }
+                    ]
+                }
+                exclWifi.split(/\s*,\s*/).forEach(function (domainString) {
+                    domainrules.ActionParameters[0].Domains.push(domainString);
+                });
+
+                settings.OnDemandRules.push(domainrules);
             }
 
             if (getCookie(i + "useWifi") == "true") {

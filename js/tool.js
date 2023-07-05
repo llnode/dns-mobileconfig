@@ -42,6 +42,7 @@ function addToList(runningNo) {
         document.cookie = runningNo + "dns2v6=" + document.getElementById("dns2v6").value + ";" + expires + ";path=/; SameSite=Strict; Secure";
         document.cookie = runningNo + "serverUrl=" + document.getElementById("serverUrl").value + ";" + expires + ";path=/; SameSite=Strict; Secure";
         document.cookie = runningNo + "exclWifi=" + encodeURIComponent(document.getElementById("exclWifi").value) + ";" + expires + ";path=/; SameSite=Strict; Secure";
+        document.cookie = runningNo + "exclDomains=" + encodeURIComponent(document.getElementById("exclDomains").value) + ";" + expires + ";path=/; SameSite=Strict; Secure";
         document.cookie = runningNo + "useWifi=" + document.getElementById("useWifi").checked + ";" + expires + ";path=/; SameSite=Strict; Secure";
         document.cookie = runningNo + "useCell=" + document.getElementById("useCell").checked + ";" + expires + ";path=/; SameSite=Strict; Secure";
         document.cookie = runningNo + "lockProfile=" + document.getElementById("lockProfile").checked + ";" + expires + ";path=/; SameSite=Strict; Secure";
@@ -158,6 +159,7 @@ function loadConfigToCookie(profile, index) {
         document.cookie = runningNo + "dns2v6=" + dns2v6 + ";" + expires + ";path=/; SameSite=Strict; Secure";
 
         var exclWifi = "";
+        var exclDomains = "";
         var useWifi;
         var useCell;
         if (profile.PayloadContent[index].OnDemandRules) {
@@ -181,11 +183,23 @@ function loadConfigToCookie(profile, index) {
                         }
                         exclWifi += ssid;
                     });
+                } else if (rule.Action == "EvaluateConnection") {
+                    rule.ActionParameters.forEach(parameter => {
+                        if (parameter.DomainAction == "NeverConnect") {
+                            parameter.Domains.forEach(domain => {
+                                if (exclDomains != "") {
+                                    exclDomains += ", ";
+                                }
+                                exclDomains += domain;
+                            });
+                        }
+                    });
                 }
             });
         }
 
         document.cookie = runningNo + "exclWifi=" + encodeURIComponent(exclWifi) + ";" + expires + ";path=/; SameSite=Strict; Secure";
+        document.cookie = runningNo + "exclDomains=" + encodeURIComponent(exclDomains) + ";" + expires + ";path=/; SameSite=Strict; Secure";
         document.cookie = runningNo + "useWifi=" + useWifi + ";" + expires + ";path=/; SameSite=Strict; Secure";
         document.cookie = runningNo + "useCell=" + useCell + ";" + expires + ";path=/; SameSite=Strict; Secure";
 
@@ -236,9 +250,11 @@ function loadSimpleProfile(profile) {
     //Profile locked?
     document.getElementById("lockProfile").checked = profile.PayloadContent[0].ProhibitDisablement;
 
-    //Allow Wi-Fi and Cellular, check for excluded SSIDs
+    //Allow Wi-Fi and Cellular, check for excluded SSIDs and domains
     if (profile.PayloadContent[0].OnDemandRules) {
         profile.PayloadContent[0].OnDemandRules.forEach(rule => {
+            console.log(rule);
+
             if (rule.InterfaceTypeMatch == "WiFi") {
                 if (rule.Action == "Connect") {
                     document.getElementById("useWifi").checked = true;
@@ -254,9 +270,20 @@ function loadSimpleProfile(profile) {
             } else if (rule.SSIDMatch) {
                 rule.SSIDMatch.forEach(ssid => {
                     if (document.getElementById("exclWifi").value != "") {
-                        document.getElementById("exclWifi").value += ", "
+                        document.getElementById("exclWifi").value += ", ";
                     }
                     document.getElementById("exclWifi").value += ssid;
+                });
+            } else if (rule.Action == "EvaluateConnection") {
+                rule.ActionParameters.forEach(parameter => {
+                    if (parameter.DomainAction == "NeverConnect") {
+                        parameter.Domains.forEach(domain => {
+                            if (document.getElementById("exclDomains").value != "") {
+                                document.getElementById("exclDomains").value += ", ";
+                            }
+                            document.getElementById("exclDomains").value += domain;
+                        });
+                    }
                 });
             }
         });
