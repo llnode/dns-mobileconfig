@@ -30,36 +30,50 @@
         <a href="index.html" class="w3-bar-item w3-button w3-mobile">About</a>
         <a href="tool.html" class="w3-bar-item w3-button w3-mobile">Tool</a>
         <a href="finalize.html" class="w3-bar-item w3-button w3-mobile w3-green">Finalize</a>
-        <a href="https://github.com/fyr77/dns-mobileconfig" class="w3-bar-item w3-button w3-right w3-black w3-mobile">GitHub</a>
+        <a href="https://github.com/fyr77/dns-mobileconfig"
+            class="w3-bar-item w3-button w3-right w3-black w3-mobile">GitHub</a>
         <a href="legal.html" class="w3-bar-item w3-button w3-right w3-black w3-mobile">Legal</a>
-        <a href="https://encrypted-dns.party/" target="_blank" class="w3-bar-item w3-button w3-right w3-blue-grey w3-mobile">Encrypted DNS Party</a>
+        <a href="https://encrypted-dns.party/" target="_blank"
+            class="w3-bar-item w3-button w3-right w3-blue-grey w3-mobile">Encrypted DNS Party</a>
     </div>
     <br>
     <div id="dynamicList"></div>
     <br>
     <div class="w3-bar">
-        <button id="downloadBtn" class="w3-button w3-bar-item w3-mobile w3-green" style="width:60%" onclick="saveDynamicDataToFile()" disabled>Download Profile</button>
+        <button id="downloadBtn" class="w3-button w3-bar-item w3-mobile w3-green" style="width:60%"
+            onclick="saveDynamicDataToFile()" disabled>Download Profile</button>
         <div class="w3-container w3-bar-item w3-mobile w3-teal" style="width: 20%; text-align: center;">
             <input type="checkbox" id="signChk">
             <label for="signChk">Sign Profile</label>
             <a href="#" onclick="document.getElementById('modalSign').style.display='block'">?</a>
         </div>
-        <button class="w3-button w3-bar-item w3-mobile w3-dark-gray" style="width:20%" onclick="confirmDel()">Delete All</button>
+        <button class="w3-button w3-bar-item w3-mobile w3-dark-gray" style="width:20%" onclick="confirmDel()">Delete
+            All</button>
     </div>
     <div id="modalSign" class="w3-modal">
         <div class="w3-modal-content">
-          <div class="w3-container">
-            <span onclick="document.getElementById('modalSign').style.display='none'"
-            class="w3-button w3-display-topright">&times;</span>
-            <h3>What does signing mean?</h3>
-            <p>A profile can be signed to prevent them from being tampered with after creation. Also, when installing the profiles on a device, it will be marked as "Verified" and install without warning about profile signatures.</p>
-            <h3>How does this work?</h3>
-            <p>This website uses OpenSSL on the server to sign the created profile using S/MIME. The certificates used are saved on the server and issued by Let's Encrypt. The exact backend code can be found <a href="https://github.com/fyr77/dns-mobileconfig/blob/main/backend.php#L24" target="_blank">on GitHub.</a></p>
-            <h3>What happens when the certificate expires?</h3>
-            <p>Let's Encrypt certificates are valid 90 days from the day of issue. When attempting to install a profile with an expired certificate, iOS/macOS will treat it the same as an unsigned profile. A profile that is already installed when the certificate expires will stay installed, but change status from "Verified" to "Unverified". <br>For further details, please see <a href="https://github.com/fyr77/dns-mobileconfig/issues/23" target="_blank">this issue on GitHub</a>.</p>
-          </div>
+            <div class="w3-container">
+                <span onclick="document.getElementById('modalSign').style.display='none'"
+                    class="w3-button w3-display-topright">&times;</span>
+                <h3>What does signing mean?</h3>
+                <p>A profile can be signed to prevent them from being tampered with after creation. Also, when
+                    installing the profiles on a device, it will be marked as "Verified" and install without warning
+                    about profile signatures.</p>
+                <h3>How does this work?</h3>
+                <p>This website uses OpenSSL on the server to sign the created profile using S/MIME. The certificates
+                    used are saved on the server and issued by Let's Encrypt. The exact backend code can be found <a
+                        href="https://github.com/fyr77/dns-mobileconfig/blob/main/backend.php#L24" target="_blank">on
+                        GitHub.</a></p>
+                <h3>What happens when the certificate expires?</h3>
+                <p>Let's Encrypt certificates are valid 90 days from the day of issue. When attempting to install a
+                    profile with an expired certificate, iOS/macOS will treat it the same as an unsigned profile. A
+                    profile that is already installed when the certificate expires will stay installed, but change
+                    status from "Verified" to "Unverified". <br>For further details, please see <a
+                        href="https://github.com/fyr77/dns-mobileconfig/issues/23" target="_blank">this issue on
+                        GitHub</a>.</p>
+            </div>
         </div>
-      </div>
+    </div>
 </body>
 
 </html>

@@ -235,7 +235,7 @@ function saveDynamicDataToFile() {
             if (encValue == "HTTPS") {
                 settings.DNSSettings.ServerURL = getCookie(i + "serverUrl");
             } else {
-                settings.DNSSettings.ServerName =getCookie(i + "serverUrl");
+                settings.DNSSettings.ServerName = getCookie(i + "serverUrl");
             }
 
             if (getCookie(i + "lockProfile") == "true") {
@@ -296,7 +296,7 @@ function saveDynamicDataToFile() {
     }
 
     var fullplist = plist.build(profilejson);
-    var blob = new Blob([fullplist], {type: "application/octet-stream;charset=utf-8"});
+    var blob = new Blob([fullplist], { type: "application/octet-stream;charset=utf-8" });
 
     var filename = "";
     var fd = new FormData();
@@ -304,14 +304,14 @@ function saveDynamicDataToFile() {
     fd.append('sign', document.getElementById("signChk").checked);
     let request = new XMLHttpRequest();
     request.open("POST", "backend.php", true);
-    request.onload = function() {
+    request.onload = function () {
         if (this.status >= 200 && this.status < 400) {
             let msg = this.response;
             filename = this.response;
             window.location.href = "/files/" + filename;
         }
     }
-    request.onerror = function(bla, msg) {
+    request.onerror = function (bla, msg) {
         alert("Fail: " + msg);
     };
     request.send(fd);
