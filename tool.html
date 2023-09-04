@@ -24,28 +24,28 @@
 </head>
 
 <body class="w3-container" onload="checkLoadEdit()">
-    <h1>Secure DNS profile creator <span style="font-size: small;">version 1.6.1</span></h1>
-    <h2>For iOS 14 or later and macOS 11 (Big Sur) or later</h2>
+    <h1>安全 DNS 文件生成器 <span style="font-size: small;">version 1.6.1</span></h1>
+    <h2>适用于 iOS 14、macOS 11 (Big Sur) 或更新的系统版本</h2>
 
     <div class="w3-bar w3-border bar-color">
-        <a href="index.html" class="w3-bar-item w3-button w3-mobile">About</a>
-        <a href="tool.html" class="w3-bar-item w3-button w3-green w3-mobile">Tool</a>
-        <a href="finalize.html" class="w3-bar-item w3-button w3-mobile">Finalize</a>
+        <a href="index.html" class="w3-bar-item w3-button w3-mobile">关于</a>
+        <a href="tool.html" class="w3-bar-item w3-button w3-mobile">配置工具</a>
+        <a href="finalize.html" class="w3-bar-item w3-button w3-mobile w3-green">最后确认</a>
         <a href="https://github.com/fyr77/dns-mobileconfig"
             class="w3-bar-item w3-button w3-right w3-black w3-mobile">GitHub</a>
         <a href="legal.html" class="w3-bar-item w3-button w3-right w3-black w3-mobile">Legal</a>
         <a href="https://encrypted-dns.party/" target="_blank"
-            class="w3-bar-item w3-button w3-right w3-blue-grey w3-mobile">Encrypted DNS Party</a>
+            class="w3-bar-item w3-button w3-right w3-blue-grey w3-mobile">加密 DNS 提供商</a>
     </div>
 
     <br>
 
-    <h4>Upload a pre-configured profile: <input type="file" id="fileupload" onchange="getDataFromUpload()"></h4>
-    <h4>or enter your own settings:</h4>
+    <h4>上传预配置的文件 <input type="file" id="fileupload" onchange="getDataFromUpload()"></h4>
+    <h4>或输入新设置</h4>
 
     <form id="mainForm" action="javascript:addToList()">
         <p>
-            <label for="provName">Name of DNS provider:</label>
+            <label for="provName">DNS 提供商名称:</label>
             <input type="text" id="provName" placeholder="MyCoolSecureProvider" required>
         </p>
         <p>
@@ -55,50 +55,47 @@
             <label for="dot">DNS-over-TLS (DoT)</label>
         </p>
         <p>
-            <label for="dns1v4" class="optional">IPv4 primary DNS:</label>
+            <label for="dns1v4" class="optional">首选 IPv4 DNS:</label>
             <input type="text" id="dns1v4" placeholder="0.0.0.0">
-            <label for="dns2v4" class="optional">IPv4 secondary DNS:</label>
+            <label for="dns2v4" class="optional">次要 IPv4 DNS:</label>
             <input type="text" id="dns2v4" placeholder="0.0.0.1">
-            <label for="dns1v6" class="optional">IPv6 primary DNS:</label>
+            <label for="dns1v6" class="optional">首选 IPv6 DNS:</label>
             <input type="text" id="dns1v6"
                 placeholder="0000:0000:0000:0000:0000:0000:0000:0000 - other formats also accepted">
-            <label for="dns2v6" class="optional">IPv6 secondary DNS:</label>
+            <label for="dns2v6" class="optional">次要 IPv6 DNS:</label>
             <input type="text" id="dns2v6"
                 placeholder="0000:0000:0000:0000:0000:0000:0000:0001 - other formats also accepted">
         </p>
         <p>
-            <label for="serverUrl" id="dohdotServerLabel">DoH server URL:</label>
+            <label for="serverUrl" id="dohdotServerLabel">DoH 服务器地址:</label>
             <input type="text" id="serverUrl" placeholder="https://example.com/query" required>
         </p>
         <input type="button" onclick="accordion()" class="w3-button w3-dark-grey w3-left-align" value="Advanced">
         <div id="advanced_container" class="w3-hide w3-container">
             <p>
-                <label for="exclWifi" class="optional">Excluded Wi-Fi Networks:</label>
+                <label for="exclWifi" class="optional">排除的Wi-Fi网络：</label>
                 <input type="text" id="exclWifi" placeholder="MyHomeNetwork, Silence of the LANs">
-                <span style="color: grey">Enter a comma-separated list of Wi-Fi networks (SSID) on which the encrypted
-                    DNS will be disabled.</span>
+                <span style="color: grey">请以逗号分隔的形式输入要禁用加密DNS的Wi-Fi网络（SSID）列表。</span>
             </p>
             <p>
-                <label for="exclDomains" class="optional">Excluded Domains</label>
+                <label for="exclDomains" class="optional">排除的域名：</label>
                 <input type="text" id="exclDomains" placeholder="google.com, dns.notjakob.com">
-                <span style="color: grey">Enter a comma-separated list of domains on which the encrypted DNS will be
-                    disabled.</span>
+                <span style="color: grey">请以逗号分隔的形式输入要禁用加密DNS的域名列表。</span>
             </p>
             <p>
-                Interfaces to use encrypted DNS on:
+                要在哪些接口上使用加密DNS：
                 <label for="useWifi">Wi-Fi</label>
                 <input type="checkbox" id="useWifi" checked>
-                <label for="useCell">Cellular</label>
+                <label for="useCell">蜂窝网络</label>
                 <input type="checkbox" id="useCell" checked>
                 <br>
-                <span style="color: grey">Untick to disable encrypted DNS when using WiFi/Cellular.</span>
+                <span style="color: grey">取消勾选以在使用WiFi/蜂窝数据时禁用加密DNS。</span>
             </p>
             <p>
-                <label for="lockProfile">Prohibit Disablement</label>
+                <label for="lockProfile">禁止禁用</label>
                 <input type="checkbox" id="lockProfile">
                 <br>
-                <span style="color: grey">Prohibit users from removing the profile. Only available on supervised
-                    devices.</span>
+                <span style="color: grey">禁止用户删除配置文件。只适用于受监管的设备。</span>
             </p>
         </div>
         <p><input id="btn_addToProfile" type="submit" value="Add to profile"></p>
