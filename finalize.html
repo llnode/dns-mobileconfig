@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>DNS Profile Creator</title>
+    <title>安全 DNS 文件生成器</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/w3.css">
     <link rel="stylesheet" href="css/dark-mode.css">
@@ -23,54 +23,45 @@
 </head>
 
 <body class="w3-container">
-    <h1>Secure DNS profile creator <span style="font-size: small;">version 1.6.1</span></h1>
-    <h2>For iOS 14 or later and macOS 11 (Big Sur) or later</h2>
+    <h1>安全 DNS 文件生成器 <span style="font-size: small;">version 1.6.1</span></h1>
+    <h2>适用于 iOS 14、macOS 11 (Big Sur) 或更新的系统版本</h2>
 
     <div class="w3-bar w3-border bar-color">
-        <a href="index.html" class="w3-bar-item w3-button w3-mobile">About</a>
-        <a href="tool.html" class="w3-bar-item w3-button w3-mobile">Tool</a>
-        <a href="finalize.html" class="w3-bar-item w3-button w3-mobile w3-green">Finalize</a>
+        <a href="index.html" class="w3-bar-item w3-button w3-mobile">关于</a>
+        <a href="tool.html" class="w3-bar-item w3-button w3-mobile">配置工具</a>
+        <a href="finalize.html" class="w3-bar-item w3-button w3-mobile w3-green">最后确认</a>
         <a href="https://github.com/fyr77/dns-mobileconfig"
             class="w3-bar-item w3-button w3-right w3-black w3-mobile">GitHub</a>
         <a href="legal.html" class="w3-bar-item w3-button w3-right w3-black w3-mobile">Legal</a>
         <a href="https://encrypted-dns.party/" target="_blank"
-            class="w3-bar-item w3-button w3-right w3-blue-grey w3-mobile">Encrypted DNS Party</a>
+            class="w3-bar-item w3-button w3-right w3-blue-grey w3-mobile">加密 DNS 提供商</a>
     </div>
     <br>
     <div id="dynamicList"></div>
     <br>
     <div class="w3-bar">
         <button id="downloadBtn" class="w3-button w3-bar-item w3-mobile w3-green" style="width:60%"
-            onclick="saveDynamicDataToFile()" disabled>Download Profile</button>
+            onclick="saveDynamicDataToFile()" disabled>下载配置文件</button>
         <div class="w3-container w3-bar-item w3-mobile w3-teal" style="width: 20%; text-align: center;">
             <input type="checkbox" id="signChk">
-            <label for="signChk">Sign Profile</label>
+            <label for="signChk">配置文件签名</label>
             <a href="#" onclick="document.getElementById('modalSign').style.display='block'">?</a>
         </div>
-        <button class="w3-button w3-bar-item w3-mobile w3-dark-gray" style="width:20%" onclick="confirmDel()">Delete
-            All</button>
+        <button class="w3-button w3-bar-item w3-mobile w3-dark-gray" style="width:20%" onclick="confirmDel()">删除所有</button>
     </div>
     <div id="modalSign" class="w3-modal">
         <div class="w3-modal-content">
             <div class="w3-container">
                 <span onclick="document.getElementById('modalSign').style.display='none'"
                     class="w3-button w3-display-topright">&times;</span>
-                <h3>What does signing mean?</h3>
-                <p>A profile can be signed to prevent them from being tampered with after creation. Also, when
-                    installing the profiles on a device, it will be marked as "Verified" and install without warning
-                    about profile signatures.</p>
-                <h3>How does this work?</h3>
-                <p>This website uses OpenSSL on the server to sign the created profile using S/MIME. The certificates
-                    used are saved on the server and issued by Let's Encrypt. The exact backend code can be found <a
-                        href="https://github.com/fyr77/dns-mobileconfig/blob/main/backend.php#L24" target="_blank">on
-                        GitHub.</a></p>
-                <h3>What happens when the certificate expires?</h3>
-                <p>Let's Encrypt certificates are valid 90 days from the day of issue. When attempting to install a
-                    profile with an expired certificate, iOS/macOS will treat it the same as an unsigned profile. A
-                    profile that is already installed when the certificate expires will stay installed, but change
-                    status from "Verified" to "Unverified". <br>For further details, please see <a
-                        href="https://github.com/fyr77/dns-mobileconfig/issues/23" target="_blank">this issue on
-                        GitHub</a>.</p>
+                <h3>“签名”是什么意思？</h3>
+                <p>为了防止在创建后被篡改，可以对配置文件进行签名。此外，当在设备上安装配置文件时，会标记为“已验证”，并且不会弹出有关配置文件签名的警告。</p>
+                <h3>工作远离是什么？</h3>
+                <p>该网站使用服务器上的OpenSSL使用S/MIME对创建的配置文件进行签名。使用的证书保存在服务器上，并由Let's Encrypt颁发。确切的后端代码可以在<a
+                        href="https://github.com/fyr77/dns-mobileconfig/blob/main/backend.php#L24" target="_blank">Github</a>上找到。</p>
+                <h3>证书过期了怎么办？</h3>
+                <p>Let's Encrypt证书从发行日起有效期为90天。当尝试安装一个使用过期证书的配置文件时，iOS/macOS将会将其视为未签名的配置文件。如果在证书过期时已经安装了配置文件，它将保持安装状态，但状态会从“已验证”变为“未验证”。详细信息，请参考 <a
+                        href="https://github.com/fyr77/dns-mobileconfig/issues/23" target="_blank">相关文档。</a>.</p>
             </div>
         </div>
     </div>
