@@ -16,14 +16,14 @@ function getCookie(cname) {
 
 function addToList(runningNo) {
     if (document.getElementById("dot").checked && document.getElementById("serverUrl").value.includes(":")) {
-        alert("Entering custom ports (e.g. :853) for DoT is not supported. Please remove it.");
+        alert("不支持输入自定义端口（例如：853）用于DoT。请将其删除。");
     } else {
-        var successString = "Configuration successfully edited.";
+        var successString = "配置已成功编辑。";
         var edit = true;
 
         if (runningNo === undefined) {
             edit = false;
-            successString = "Configuration successfully added to profile.";
+            successString = "配置已成功添加到个人资料中。";
 
             runningNo = getCookie("runningNo");
             if (getCookie("runningNo") == "") {
